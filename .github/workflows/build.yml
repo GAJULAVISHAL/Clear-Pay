@@ -1,22 +1,25 @@
-name : Build on PR
+name: Build on PR
+
 on:
   pull_request:
     branches:
-      - main
+      - master
+
 jobs:
   build:
     runs-on: ubuntu-latest
-    env:
-      DATABASE_URL: postgresql://postgres:postgres@127.0.0.1:5432/postgres?schema=public
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Use Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: '20'
-      - name: Install dependencies
+      
+      - name: Install Dependencies
         run: npm install
-      - name: Generate Prisma client
-        run: npm run db:generate --workspace packages/database
-      - name: Build
+        
+      - name: Generate Prisma Client
+        run: npx turbo run db:generate
+
+      - name: Run Build
         run: npm run build
